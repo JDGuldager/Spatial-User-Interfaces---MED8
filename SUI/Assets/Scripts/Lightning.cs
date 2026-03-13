@@ -9,8 +9,8 @@ public class Lightning : Ball
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 }
