@@ -1,31 +1,31 @@
 using UnityEngine;
+using System.Collections;
 
 public class SpawnTestBall : MonoBehaviour
 {
-    private Rigidbody Rigidbody;
-    [SerializeField]
-    private GameObject testBall;
-    [SerializeField]
-    private Transform spawnPoint;
+    [SerializeField] private GameObject testBall;
+    [SerializeField] private Transform spawnPoint;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private bool canSpawn = true;
+
+    private void Start()
     {
-        Rigidbody = GetComponent<Rigidbody>();
         Instantiate(testBall, spawnPoint.position, spawnPoint.rotation);
-
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "StartBall")
+        if (collision.gameObject.CompareTag("StartBall") && canSpawn)
         {
-            Instantiate(testBall, spawnPoint.position, spawnPoint.rotation);
+            canSpawn = false;
+            StartCoroutine(WaitToSpawnBall(3f));
         }
+    }
+
+    private IEnumerator WaitToSpawnBall(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Instantiate(testBall, spawnPoint.position, spawnPoint.rotation);
+        canSpawn = true;
     }
 }
