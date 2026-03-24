@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using Oculus.Haptics;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public abstract class Ball : MonoBehaviour
 {
@@ -18,15 +19,28 @@ public abstract class Ball : MonoBehaviour
     [SerializeField] protected HapticClip hoverClip;
     [SerializeField] protected HapticClip grabClip;
 
-    [SerializeField] private HapticPlayer hapticPlayer;
+    private HapticClipPlayer rightHoverPlayer;
+    private HapticClipPlayer leftHoverPlayer;
+    private HapticClipPlayer rightGrabPlayer;
+    private HapticClipPlayer leftGrabPlayer;
 
 
-    
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-       
+        rightHoverPlayer = new HapticClipPlayer(hoverClip);
+        leftHoverPlayer = new HapticClipPlayer(hoverClip);
+
+        rightGrabPlayer = new HapticClipPlayer(grabClip);
+        leftGrabPlayer = new HapticClipPlayer(grabClip);
+
+
+        rightHoverPlayer.isLooping = true;
+        leftHoverPlayer.isLooping = true;
+
 
         if (onImpact != null)
         {
@@ -35,7 +49,6 @@ public abstract class Ball : MonoBehaviour
         
     }
 
-    // Update is called once per frame
     protected virtual void Update()
     {
         
@@ -56,34 +69,88 @@ public abstract class Ball : MonoBehaviour
     }
 
     //Events
-    void OnHoverExited(HoverExitEventArgs args)
-    {
-        hapticPlayer = null;
-    }
+    
 
     void OnHoverEntered(HoverEnterEventArgs args)
     {
-        Debug.Log("Hover triggered");
-
-        if (hapticPlayer == null)
-        {
-            Debug.LogError("HapticPlayer is NULL!");
-            hapticPlayer = HapticPlayer.Instance;
-        }
-
-        if (hoverClip == null)
-            Debug.LogError("HoverClip is NULL!");
-        
-        hapticPlayer.PlayHaptics(hoverClip, args.interactorObject, true);
+        PlayHoverClip(GetController(args.interactorObject));
     }
-
-    
+    void OnHoverExited(HoverExitEventArgs args)
+    {
+        StopHoverClip(GetController(args.interactorObject));
+    }
 
     void OnGrabbed(SelectEnterEventArgs args)
     {
-        hapticPlayer = null;
-        hapticPlayer = HapticPlayer.Instance;
-        hapticPlayer.PlayHaptics(grabClip, args.interactorObject, false);
+        StopHoverClip(GetController(args.interactorObject));
+        PlayGrabClip(GetController(args.interactorObject));
+    }
+
+    void PlayHoverClip(Controller hand)
+    {
+        switch (hand)
+        {
+            case Controller.Right:
+                rightHoverPlayer.Play(Controller.Right);
+                break;
+            case Controller.Left:
+                leftHoverPlayer.Play(Controller.Left);
+                break;
+            default:
+                Debug.LogWarning("Input hand not mapped for: " + hand);
+                break;
+        }
+        Debug.Log("Should feel vibration from clipPlayer1 on " + hand + " controller.");
+    }
+    public void StopHoverClip(Controller hand)
+    {
+        switch (hand)
+        {
+            case Controller.Right:
+                rightHoverPlayer.Stop();
+                break;
+            case Controller.Left:
+                leftHoverPlayer.Stop();
+                break;
+            default:
+                Debug.LogWarning("Input hand not mapped for: " + hand);
+                break;
+        }
+        Debug.Log("Vibration from clipPlayer1 should stop on hand " + hand + ".");
+    }
+
+    public void PlayGrabClip(Controller hand)
+    {
+        switch (hand)
+        {
+            case Controller.Right:
+                rightGrabPlayer.Play(Controller.Right);
+                break;
+            case Controller.Left:
+                leftGrabPlayer.Play(Controller.Left);
+                break;
+            default:
+                Debug.LogWarning("Input hand not mapped for: " + hand);
+                break;
+        }
+        Debug.Log("Should feel vibration from grabClip on " + hand + " controller.");
+    }    
+
+    private Controller GetController(IXRInteractor interactor)
+    {
+        if (interactor is XRBaseInputInteractor controllerInteractor)
+        {
+            var oculusController = controllerInteractor.handedness == InteractorHandedness.Left
+                ? Controller.Left
+                : Controller.Right;
+
+            Debug.Log("Playing haptic on " + controllerInteractor.handedness);
+
+            return oculusController;
+        }
+        Debug.LogWarning("Interactor is not XRBaseInputInteractor! Defaulting to Right controller.");
+
+        return Controller.Right;
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
