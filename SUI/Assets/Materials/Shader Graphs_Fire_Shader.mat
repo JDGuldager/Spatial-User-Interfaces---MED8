@@ -62,12 +62,14 @@ Material:
     - _CastShadows: 1
     - _Cull: 2
     - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _Emission_Strength: 2.76
     - _Noise_Scale: 4
     - _Noise_Speed: 0.25
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
     - _Surface: 0
     - _ZTest: 4
     - _ZWrite: 1
