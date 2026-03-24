@@ -29,6 +29,8 @@ public class Rock : Ball
             RB.isKinematic = true;
             ball.SetActive(false);
             onImpact.SetActive(true);
+            interactable.enabled = false;
+            Destroy(gameObject, destroyDelay);
         }
         //foreach (Rigidbody rb in onImpact.GetComponentsInChildren<Rigidbody>())
         //{
@@ -36,7 +38,7 @@ public class Rock : Ball
         //}
 
 
-        Destroy(gameObject, destroyDelay);
+        
 
     }
 }

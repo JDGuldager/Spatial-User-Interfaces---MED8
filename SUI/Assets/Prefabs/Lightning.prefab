@@ -161,11 +161,10 @@ MonoBehaviour:
   rb: {fileID: -8441739486619946564}
   effect: {fileID: 4009332402280891401}
   onImpact: {fileID: 5487244334352827623}
-  destroyDelay: 3
+  destroyDelay: 2
   interactable: {fileID: 1410744638886740517}
   hoverClip: {fileID: 2460798210113038985, guid: 6a11218e29ce91041951162b902e8b8b, type: 3}
   grabClip: {fileID: 2460798210113038985, guid: 9ee9b17c329b5884c986faa9f862f2d9, type: 3}
-  hapticPlayer: {fileID: 331668261295337340, guid: 1322defd38257354cba044722df79940, type: 3}
 --- !u!114 &1410744638886740517
 MonoBehaviour:
   m_ObjectHideFlags: 0

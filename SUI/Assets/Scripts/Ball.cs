@@ -14,7 +14,7 @@ public abstract class Ball : MonoBehaviour
     [SerializeField] protected GameObject effect;
     [SerializeField] protected GameObject onImpact;
     [SerializeField] protected float destroyDelay = 2f;
-    [SerializeField] private XRGrabInteractable interactable;
+    [SerializeField] protected XRGrabInteractable interactable;
 
     [SerializeField] protected HapticClip hoverClip;
     [SerializeField] protected HapticClip grabClip;
@@ -162,6 +162,7 @@ public abstract class Ball : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezeAll;
             effect.SetActive(false);
             onImpact.SetActive(true);
+            interactable.enabled = false;
             Destroy(gameObject, destroyDelay);
         }
     }
