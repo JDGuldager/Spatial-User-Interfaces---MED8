@@ -4,6 +4,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 using Oculus.Haptics;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using System.Security.Cryptography;
+using System.Collections;
 
 public abstract class Ball : MonoBehaviour
 {
@@ -24,12 +26,17 @@ public abstract class Ball : MonoBehaviour
     private HapticClipPlayer rightGrabPlayer;
     private HapticClipPlayer leftGrabPlayer;
 
+    private bool isHoveringLeft = false;
+    private bool isHoveringRight = false;
 
-
+    [SerializeField] private Transform playerHand;
+    private float duration = 1f;
+    [SerializeField] private AnimationCurve grabCurve;
+    private float timeElapsed;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+    private void Awake()
     {
         rightHoverPlayer = new HapticClipPlayer(hoverClip);
         leftHoverPlayer = new HapticClipPlayer(hoverClip);
@@ -73,17 +80,45 @@ public abstract class Ball : MonoBehaviour
 
     void OnHoverEntered(HoverEnterEventArgs args)
     {
-        PlayHoverClip(GetController(args.interactorObject));
+        var hand = GetController(args.interactorObject);
+
+        if (hand == Controller.Left)
+        {
+            if (isHoveringLeft) return; 
+            isHoveringLeft = true;
+        }
+        else
+        {
+            if (isHoveringRight) return;
+            isHoveringRight = true;
+        }
+
+        PlayHoverClip(hand);
     }
+
     void OnHoverExited(HoverExitEventArgs args)
     {
-        StopHoverClip(GetController(args.interactorObject));
+        var hand = GetController(args.interactorObject);
+
+        if (hand == Controller.Left)
+        {
+            if (!isHoveringLeft) return;
+            isHoveringLeft = false;
+        }
+        else
+        {
+            if (!isHoveringRight) return;
+            isHoveringRight = false;
+        }
+
+        StopHoverClip(hand);
     }
 
     void OnGrabbed(SelectEnterEventArgs args)
     {
         StopHoverClip(GetController(args.interactorObject));
         PlayGrabClip(GetController(args.interactorObject));
+        StartCoroutine(FlyToHandCoroutine(transform.position, playerHand.position, duration));
     }
 
     void PlayHoverClip(Controller hand)
@@ -152,6 +187,27 @@ public abstract class Ball : MonoBehaviour
 
         return Controller.Right;
     }
+
+    
+
+    private IEnumerator FlyToHandCoroutine(Vector3 start, Vector3 target, float duration)
+    {
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+
+            float curvedT = grabCurve.Evaluate(t);
+
+            transform.position = Vector3.Lerp(start, target, curvedT);
+
+            yield return null;
+        }
+        transform.position = target;
+    }
+
 
     protected virtual void OnCollisionEnter(Collision collision)
     {

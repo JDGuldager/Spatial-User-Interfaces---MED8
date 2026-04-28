@@ -247,6 +247,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawnTestBall
   testBall: {fileID: 2795182468436240177, guid: 772dd47d54e198f43832d2d499e4be14, type: 3}
   spawnPoint: {fileID: 1806901489}
+--- !u!4 &36368200 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5870790035848123411, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &142894862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -255,6 +260,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
+      propertyPath: grabClip
+      value: 
+      objectReference: {fileID: 2460798210113038985, guid: 072a0240c582d4042bf870066de7b2b0, type: 3}
+    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
+      propertyPath: hoverClip
+      value: 
+      objectReference: {fileID: 2460798210113038985, guid: 237e3467803a25841b90998a6223ec9c, type: 3}
+    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
+      propertyPath: playerHand
+      value: 
+      objectReference: {fileID: 36368200}
+    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5738465241882623454, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.81
@@ -1062,8 +1099,56 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabClip
+      value: 
+      objectReference: {fileID: 2460798210113038985, guid: 53af39772c3809c4788589f8e890c6f4, type: 3}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: hoverClip
+      value: 
+      objectReference: {fileID: 2460798210113038985, guid: a64e0b601e3800e478845d7cf5702ec3, type: 3}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: playerHand
+      value: 
+      objectReference: {fileID: 36368200}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: hapticPlayer
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[0].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[0].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1540,8 +1625,40 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
+      propertyPath: grabClip
+      value: 
+      objectReference: {fileID: 2460798210113038985, guid: e37ed4badb92b8f4987501e007693488, type: 3}
+    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
+      propertyPath: hoverClip
+      value: 
+      objectReference: {fileID: 2460798210113038985, guid: 7026aa5ea736ac345964e5ab2a532c49, type: 3}
+    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
+      propertyPath: playerHand
+      value: 
+      objectReference: {fileID: 36368200}
+    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
       propertyPath: hapticPlayer
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].outSlope
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8797977422501477687, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
       propertyPath: m_Name
