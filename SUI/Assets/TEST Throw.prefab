@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7878010611773730989}
   - component: {fileID: 8527201401951768122}
   - component: {fileID: 3751668617421133325}
+  - component: {fileID: -529515194863738316}
   m_Layer: 0
   m_Name: TEST Throw
   m_TagString: StartBall
@@ -294,3 +295,18 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
+--- !u!114 &-529515194863738316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2795182468436240177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbdb7e925b5156c4c9f34fe3beea3bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ThrowLogic
+  throwSpeed: 20
+  catchDistance: 0.25
+  PlayersHand: {fileID: 0}
