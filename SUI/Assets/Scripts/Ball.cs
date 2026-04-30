@@ -30,7 +30,7 @@ public abstract class Ball : MonoBehaviour
     private bool isHoveringRight = false;
 
     [SerializeField] private Transform playerHand;
-    private float duration = 1f;
+    [SerializeField] private float duration = 1f;
     [SerializeField] private AnimationCurve grabCurve;
     private float timeElapsed;
 
@@ -118,7 +118,6 @@ public abstract class Ball : MonoBehaviour
     {
         StopHoverClip(GetController(args.interactorObject));
         PlayGrabClip(GetController(args.interactorObject));
-        StartCoroutine(FlyToHandCoroutine(transform.position, playerHand.position, duration));
     }
 
     void PlayHoverClip(Controller hand)
@@ -189,7 +188,11 @@ public abstract class Ball : MonoBehaviour
     }
 
     
-
+    public void BallToHand()
+    {
+        StartCoroutine(FlyToHandCoroutine(transform.position, playerHand.position, duration));
+    }
+    
     private IEnumerator FlyToHandCoroutine(Vector3 start, Vector3 target, float duration)
     {
         float time = 0f;
@@ -207,6 +210,7 @@ public abstract class Ball : MonoBehaviour
         }
         transform.position = target;
     }
+    
 
 
     protected virtual void OnCollisionEnter(Collision collision)
