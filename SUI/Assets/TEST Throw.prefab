@@ -251,7 +251,7 @@ MonoBehaviour:
   m_MovementType: 2
   m_PredictedVisualsTransform: {fileID: 0}
   m_VelocityDamping: 1
-  m_VelocityScale: 1
+  m_VelocityScale: 2.5
   m_AngularVelocityDamping: 1
   m_AngularVelocityScale: 1
   m_TrackPosition: 1
@@ -283,7 +283,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_ThrowVelocityScale: 1.5
+  m_ThrowVelocityScale: 2
   m_ThrowAngularVelocityScale: 1
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1
@@ -307,6 +307,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbdb7e925b5156c4c9f34fe3beea3bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::ThrowLogic
-  throwSpeed: 20
+  returnSpeed: 20
   catchDistance: 0.25
+  releaseBufferTime: 0.2
+  throwPowerMultiplier: 2.5
+  minimumThrowSpeed: 6
+  aimAssistAmount: 0.35
+  crosshairPrefab: {fileID: 8520483733391251754, guid: f1d80f4e9947184478d6618f1e0f0bcd, type: 3}
+  crosshairForwardOffset: 1
+  triggerPressAmount: 0.7
   PlayersHand: {fileID: 0}

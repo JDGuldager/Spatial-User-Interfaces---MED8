@@ -1,39 +1,48 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-// Idle   = doing nothing special
-// Return = flying back to the player's hand
 public enum State { Idle, Return }
 
 public class ThrowLogic : MonoBehaviour
 {
     [Header("Return Settings")]
-
-    // How fast the object flies back to the hand
     [SerializeField] float returnSpeed = 20f;
+    [SerializeField] float catchDistance = 0.35f;
+    [SerializeField] float releaseBufferTime = 0.5f;
 
-    // How close the object needs to be before it snaps into the hand
-    [SerializeField] float catchDistance = 0.25f;
+    [Header("Controlled Throw")]
+    [SerializeField] float throwPowerMultiplier = 2.5f;
+    [SerializeField] float minimumThrowSpeed = 6f;
 
-    // Which controller button should recall the object
-    // RightHand = right controller
-    // LeftHand = left controller
-    [SerializeField] XRNode returnController = XRNode.RightHand;
+    [Range(0f, 1f)]
+    [SerializeField] float aimAssistAmount = 0.25f;
 
-    // How far the physical trigger must be pressed before it counts
+    [Header("Crosshair")]
+    [SerializeField] GameObject crosshairPrefab;
+    [SerializeField] float crosshairForwardOffset = 3f;
+
+    [Header("Input Settings")]
     [SerializeField] float triggerPressAmount = 0.7f;
 
-    // The hand/controller the object should return to
+    GameObject crosshairInstance;
+
     public Transform PlayersHand;
+
+    Transform aimHand;
+    Transform leftHandController;
+    Transform rightHandController;
 
     Rigidbody rb;
     XRGrabInteractable grab;
     State state;
 
-    // Used so the button only activates once per press
     bool triggerWasPressedLastFrame;
+    float lastReleaseTime = -999f;
+
+    static ThrowLogic lastGrabbedObject;
 
     private void Awake()
     {
@@ -41,24 +50,29 @@ public class ThrowLogic : MonoBehaviour
         grab = GetComponent<XRGrabInteractable>();
 
         if (grab == null)
-        {
             Debug.LogError("No XRGrabInteractable found on this object!");
-        }
     }
 
     private void Start()
     {
         state = State.Idle;
+
+        if (VRReferences.Instance != null)
+        {
+            leftHandController = VRReferences.Instance.LeftHand;
+            rightHandController = VRReferences.Instance.RightHand;
+        }
+        else
+        {
+            Debug.LogError("VRReferences not found in scene.");
+        }
     }
 
     private void OnEnable()
     {
         if (grab != null)
         {
-            // Called when the player grabs the object
             grab.selectEntered.AddListener(OnGrab);
-
-            // Called when the player lets go of the object
             grab.selectExited.AddListener(OnRelease);
         }
     }
@@ -72,95 +86,245 @@ public class ThrowLogic : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        DespawnCrosshair();
+    }
+
     private void Update()
     {
-        // Check if the player pressed the trigger button
+        UpdateCrosshair();
+
         bool triggerPressedNow = IsReturnTriggerPressed();
 
-        // This means: trigger was just pressed this frame,
-        // not held down from the previous frame
         if (triggerPressedNow && !triggerWasPressedLastFrame)
-        {
             ReturnObject();
-        }
 
         triggerWasPressedLastFrame = triggerPressedNow;
+    }
 
-        // If the object is currently returning, keep moving it toward the hand
+    private void FixedUpdate()
+    {
         if (state == State.Return)
-        {
             ReturnToHand();
-        }
     }
 
     private void OnGrab(SelectEnterEventArgs args)
     {
-        // Remember which hand grabbed the object
-        // This is where the object will return later
+        // Keep this as the actual hand/interactor that grabbed the ball.
+        // Do NOT overwrite it with left/right reference transforms later.
         PlayersHand = args.interactorObject.transform;
 
-        Debug.Log("Object was grabbed by: " + PlayersHand.name);
+        lastGrabbedObject = this;
+
+        SetAimHand();
 
         state = State.Idle;
+
+        SpawnCrosshair();
+
+        if (VRReferences.Instance != null && aimHand != null)
+            VRReferences.Instance.SetVisualVisibleForHand(aimHand, false);
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
-        // Do NOT add custom throw force here.
-        // XR Grab Interactable already handles throwing normally when released.
+        lastReleaseTime = Time.time;
+
+        // Capture the natural velocity from XR Grab Interactable.
+        Vector3 naturalVelocity = rb.linearVelocity;
+
+        Vector3 crosshairTarget;
+
+        if (aimHand != null)
+        {
+            crosshairTarget = aimHand.position + aimHand.forward * crosshairForwardOffset;
+        }
+        else if (naturalVelocity.sqrMagnitude > 0.01f)
+        {
+            crosshairTarget = transform.position + naturalVelocity.normalized * crosshairForwardOffset;
+        }
+        else
+        {
+            crosshairTarget = transform.position + transform.forward * crosshairForwardOffset;
+        }
+
+        DespawnCrosshair();
+
+        if (VRReferences.Instance != null && aimHand != null)
+            VRReferences.Instance.SetVisualVisibleForHand(aimHand, true);
+
+        StartCoroutine(ApplyControlledThrow(naturalVelocity, crosshairTarget));
+
         state = State.Idle;
+    }
+
+    private IEnumerator ApplyControlledThrow(Vector3 naturalVelocity, Vector3 crosshairTarget)
+    {
+        // Wait one physics step so XR Grab Interactable fully releases the object first.
+        yield return new WaitForFixedUpdate();
+
+        rb.isKinematic = false;
+        rb.useGravity = true;
+
+        Vector3 naturalDirection =
+            naturalVelocity.sqrMagnitude > 0.01f
+                ? naturalVelocity.normalized
+                : PlayersHand.forward;
+
+        Vector3 aimDirection =
+            (crosshairTarget - transform.position).normalized;
+
+        // Blend natural throw direction toward the crosshair direction.
+        // Low value = more natural.
+        // High value = more aim-assisted.
+        Vector3 finalDirection =
+            Vector3.Slerp(naturalDirection, aimDirection, aimAssistAmount).normalized;
+
+        float finalSpeed =
+            Mathf.Max(naturalVelocity.magnitude * throwPowerMultiplier, minimumThrowSpeed);
+
+        rb.linearVelocity = finalDirection * finalSpeed;
+    }
+
+    private void SetAimHand()
+    {
+        if (leftHandController == null || rightHandController == null)
+        {
+            Debug.LogWarning("Missing hand references. Check VRReferences.");
+            return;
+        }
+
+        // IMPORTANT:
+        // Do NOT change PlayersHand here.
+        // PlayersHand must remain the actual hand/interactor that grabbed the ball.
+
+        float distanceToLeft =
+            Vector3.Distance(PlayersHand.position, leftHandController.position);
+
+        float distanceToRight =
+            Vector3.Distance(PlayersHand.position, rightHandController.position);
+
+        if (distanceToLeft < distanceToRight)
+        {
+            // Ball is held by left hand, so aim with right hand.
+            aimHand = rightHandController;
+        }
+        else
+        {
+            // Ball is held by right hand, so aim with left hand.
+            aimHand = leftHandController;
+        }
+    }
+
+    private void SpawnCrosshair()
+    {
+        if (crosshairPrefab == null)
+            return;
+
+        if (crosshairInstance != null)
+            Destroy(crosshairInstance);
+
+        crosshairInstance = Instantiate(crosshairPrefab);
+        crosshairInstance.SetActive(true);
+    }
+
+    private void DespawnCrosshair()
+    {
+        if (crosshairInstance != null)
+        {
+            Destroy(crosshairInstance);
+            crosshairInstance = null;
+        }
+    }
+
+    private void UpdateCrosshair()
+    {
+        if (crosshairInstance == null)
+            return;
+
+        if (grab != null && grab.isSelected && aimHand != null)
+        {
+            crosshairInstance.SetActive(true);
+
+            crosshairInstance.transform.position =
+                aimHand.position + aimHand.forward * crosshairForwardOffset;
+
+            if (Camera.main != null)
+            {
+                Vector3 directionToCamera =
+                    crosshairInstance.transform.position - Camera.main.transform.position;
+
+                crosshairInstance.transform.rotation =
+                    Quaternion.LookRotation(directionToCamera);
+            }
+        }
+        else
+        {
+            crosshairInstance.SetActive(false);
+        }
     }
 
     private bool IsReturnTriggerPressed()
     {
-        // Get the VR controller device, for example the right hand controller
+        XRNode returnController = GetReturnControllerNode();
         InputDevice device = InputDevices.GetDeviceAtXRNode(returnController);
 
         if (!device.isValid)
-        {
             return false;
-        }
 
-        // First try the simple trigger button value
         if (device.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerButtonPressed))
         {
             if (triggerButtonPressed)
-            {
                 return true;
-            }
         }
 
-        // Also check the analog trigger amount
-        // This is useful because some controllers report trigger pressure instead of just true/false
         if (device.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue))
-        {
             return triggerValue >= triggerPressAmount;
-        }
 
         return false;
     }
 
+    private XRNode GetReturnControllerNode()
+    {
+        if (PlayersHand == null)
+            return XRNode.RightHand;
+
+        float distanceToLeft =
+            leftHandController != null
+                ? Vector3.Distance(PlayersHand.position, leftHandController.position)
+                : float.MaxValue;
+
+        float distanceToRight =
+            rightHandController != null
+                ? Vector3.Distance(PlayersHand.position, rightHandController.position)
+                : float.MaxValue;
+
+        return distanceToLeft < distanceToRight ? XRNode.LeftHand : XRNode.RightHand;
+    }
+
     public void ReturnObject()
     {
-        // Do not recall the object while it is currently being held
-        if (grab != null && grab.isSelected)
-        {
+        if (lastGrabbedObject != this)
             return;
-        }
+
+        if (grab != null && grab.isSelected)
+            return;
+
+        if (Time.time < lastReleaseTime + releaseBufferTime)
+            return;
 
         if (PlayersHand == null)
         {
-            Debug.LogWarning("PlayersHand is missing. Grab the object first so it knows which hand to return to.");
+            Debug.LogWarning("PlayersHand is missing. Grab the object first.");
             return;
         }
 
-        // Detach from anything just in case
-        transform.SetParent(null);
+        transform.SetParent(null, true);
 
-        // Make sure physics is active while flying back
         rb.isKinematic = false;
+        rb.useGravity = false;
 
-        // Start returning
         state = State.Return;
     }
 
@@ -172,8 +336,6 @@ public class ThrowLogic : MonoBehaviour
         if (distance > catchDistance)
         {
             Vector3 direction = toHand.normalized;
-
-            // Fly directly toward the remembered hand
             rb.linearVelocity = direction * returnSpeed;
         }
         else
@@ -186,17 +348,13 @@ public class ThrowLogic : MonoBehaviour
     {
         state = State.Idle;
 
-        // Stop all movement
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        // Stop physics from pulling it away
         rb.isKinematic = true;
+        rb.useGravity = false;
 
-        // Lock the object back to the hand
-        transform.SetParent(PlayersHand);
-
-        // Snap into the hand position
+        transform.SetParent(PlayersHand, true);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     }
