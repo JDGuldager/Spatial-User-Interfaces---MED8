@@ -1528,6 +1528,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd51909fcd6be7448238c32b94d87e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::ControllerData
+  leftVeloDetected: 0
+  rightVeloDetected: 0
+  velocityThreshold: 0.1
 --- !u!4 &1287956183
 Transform:
   m_ObjectHideFlags: 0

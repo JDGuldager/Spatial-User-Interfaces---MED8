@@ -29,10 +29,13 @@ public abstract class Ball : MonoBehaviour
     private bool isHoveringLeft = false;
     private bool isHoveringRight = false;
 
-    [SerializeField] private Transform playerHand;
+    [SerializeField] private Transform playerHandRight;
+    [SerializeField] private Transform playerHandLeft;
     [SerializeField] private float duration = 1f;
     [SerializeField] private AnimationCurve grabCurve;
     private float timeElapsed;
+
+    private ControllerData controllerDataScript;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -53,7 +56,8 @@ public abstract class Ball : MonoBehaviour
         {
             onImpact.SetActive(false);
         }
-        
+
+        controllerDataScript = FindAnyObjectByType<ControllerData>();
     }
 
     protected virtual void Update()
@@ -190,7 +194,24 @@ public abstract class Ball : MonoBehaviour
     
     public void BallToHand()
     {
-        StartCoroutine(FlyToHandCoroutine(transform.position, playerHand.position, duration));
+        Transform hand;
+
+        if (isHoveringLeft && controllerDataScript.leftVeloDetected)
+        {
+            hand = playerHandLeft;
+        }
+
+        else if (isHoveringRight && controllerDataScript.rightVeloDetected)
+        {
+            hand = playerHandRight;
+        }
+
+        else
+        {
+            return;
+        }
+        
+        StartCoroutine(FlyToHandCoroutine(transform.position, hand.position, duration));
     }
     
     private IEnumerator FlyToHandCoroutine(Vector3 start, Vector3 target, float duration)
