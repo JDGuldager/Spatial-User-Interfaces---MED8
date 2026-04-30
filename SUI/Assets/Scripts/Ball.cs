@@ -29,6 +29,8 @@ public abstract class Ball : MonoBehaviour
     private bool isHoveringLeft = false;
     private bool isHoveringRight = false;
 
+    private bool canFly = false;
+
     [SerializeField] private Transform playerHandRight;
     [SerializeField] private Transform playerHandLeft;
     [SerializeField] private float duration = 1f;
@@ -62,7 +64,10 @@ public abstract class Ball : MonoBehaviour
 
     protected virtual void Update()
     {
-        
+        if (canFly)
+        {
+            BallToHand();
+        }
     }
 
     private void OnEnable()
@@ -98,6 +103,8 @@ public abstract class Ball : MonoBehaviour
         }
 
         PlayHoverClip(hand);
+
+        canFly = true;
     }
 
     void OnHoverExited(HoverExitEventArgs args)
@@ -116,6 +123,7 @@ public abstract class Ball : MonoBehaviour
         }
 
         StopHoverClip(hand);
+        canFly = false;
     }
 
     void OnGrabbed(SelectEnterEventArgs args)
@@ -196,28 +204,26 @@ public abstract class Ball : MonoBehaviour
     {
         Transform hand;
 
-        if (isHoveringLeft && controllerDataScript.leftVeloDetected)
+        if (controllerDataScript.leftVeloDetected && isHoveringLeft)
         {
             hand = playerHandLeft;
         }
-
-        else if (isHoveringRight && controllerDataScript.rightVeloDetected)
+        else if (controllerDataScript.rightVeloDetected && isHoveringRight)
         {
             hand = playerHandRight;
         }
-
         else
         {
             return;
         }
-        
+
         StartCoroutine(FlyToHandCoroutine(transform.position, hand.position, duration));
     }
     
     private IEnumerator FlyToHandCoroutine(Vector3 start, Vector3 target, float duration)
     {
         float time = 0f;
-
+        canFly = false;
         while (time < duration)
         {
             time += Time.deltaTime;
