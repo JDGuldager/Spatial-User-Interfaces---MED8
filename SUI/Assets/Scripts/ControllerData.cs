@@ -53,7 +53,7 @@ public class ControllerData : MonoBehaviour
     {
         if (LeftControllerDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out LeftControllerVelocity))
         {
-            Debug.Log("Left Velocity: " + LeftControllerVelocity);
+            Debug.Log("Left Velocity: " + LeftControllerVelocity.magnitude);
         }
         else
         {
@@ -62,7 +62,7 @@ public class ControllerData : MonoBehaviour
 
         if (RightControllerDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out RightControllerVelocity))
         {
-            Debug.Log("Right Velocity: " + RightControllerVelocity);
+            Debug.Log("Right Velocity: " + RightControllerVelocity.magnitude);
         }
         else
         {
