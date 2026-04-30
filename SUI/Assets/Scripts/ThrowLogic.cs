@@ -17,9 +17,6 @@ public class ThrowLogic : MonoBehaviour
     [SerializeField] float throwPowerMultiplier = 2.5f;
     [SerializeField] float minimumThrowSpeed = 6f;
 
-    [Range(0f, 1f)]
-    [SerializeField] float aimAssistAmount = 0.25f;
-
     [Header("Crosshair")]
     [SerializeField] GameObject crosshairPrefab;
     [SerializeField] float crosshairForwardOffset = 3f;
@@ -111,10 +108,7 @@ public class ThrowLogic : MonoBehaviour
 
     private void OnGrab(SelectEnterEventArgs args)
     {
-        // Keep this as the actual hand/interactor that grabbed the ball.
-        // Do NOT overwrite it with left/right reference transforms later.
         PlayersHand = args.interactorObject.transform;
-
         lastGrabbedObject = this;
 
         SetAimHand();
@@ -131,18 +125,11 @@ public class ThrowLogic : MonoBehaviour
     {
         lastReleaseTime = Time.time;
 
-        // Capture the natural velocity from XR Grab Interactable.
-        Vector3 naturalVelocity = rb.linearVelocity;
-
         Vector3 crosshairTarget;
 
         if (aimHand != null)
         {
             crosshairTarget = aimHand.position + aimHand.forward * crosshairForwardOffset;
-        }
-        else if (naturalVelocity.sqrMagnitude > 0.01f)
-        {
-            crosshairTarget = transform.position + naturalVelocity.normalized * crosshairForwardOffset;
         }
         else
         {
@@ -154,37 +141,27 @@ public class ThrowLogic : MonoBehaviour
         if (VRReferences.Instance != null && aimHand != null)
             VRReferences.Instance.SetVisualVisibleForHand(aimHand, true);
 
-        StartCoroutine(ApplyControlledThrow(naturalVelocity, crosshairTarget));
+        StartCoroutine(ApplyControlledThrow(crosshairTarget));
 
         state = State.Idle;
     }
 
-    private IEnumerator ApplyControlledThrow(Vector3 naturalVelocity, Vector3 crosshairTarget)
+    private IEnumerator ApplyControlledThrow(Vector3 crosshairTarget)
     {
-        // Wait one physics step so XR Grab Interactable fully releases the object first.
         yield return new WaitForFixedUpdate();
 
         rb.isKinematic = false;
         rb.useGravity = true;
 
-        Vector3 naturalDirection =
-            naturalVelocity.sqrMagnitude > 0.01f
-                ? naturalVelocity.normalized
-                : PlayersHand.forward;
+        Vector3 controllerVelocity = GetThrowingControllerVelocity();
 
-        Vector3 aimDirection =
+        Vector3 throwDirection =
             (crosshairTarget - transform.position).normalized;
 
-        // Blend natural throw direction toward the crosshair direction.
-        // Low value = more natural.
-        // High value = more aim-assisted.
-        Vector3 finalDirection =
-            Vector3.Slerp(naturalDirection, aimDirection, aimAssistAmount).normalized;
+        float speed =
+            Mathf.Max(controllerVelocity.magnitude * throwPowerMultiplier, minimumThrowSpeed);
 
-        float finalSpeed =
-            Mathf.Max(naturalVelocity.magnitude * throwPowerMultiplier, minimumThrowSpeed);
-
-        rb.linearVelocity = finalDirection * finalSpeed;
+        rb.linearVelocity = throwDirection * speed;
     }
 
     private void SetAimHand()
@@ -195,10 +172,6 @@ public class ThrowLogic : MonoBehaviour
             return;
         }
 
-        // IMPORTANT:
-        // Do NOT change PlayersHand here.
-        // PlayersHand must remain the actual hand/interactor that grabbed the ball.
-
         float distanceToLeft =
             Vector3.Distance(PlayersHand.position, leftHandController.position);
 
@@ -207,12 +180,10 @@ public class ThrowLogic : MonoBehaviour
 
         if (distanceToLeft < distanceToRight)
         {
-            // Ball is held by left hand, so aim with right hand.
             aimHand = rightHandController;
         }
         else
         {
-            // Ball is held by right hand, so aim with left hand.
             aimHand = leftHandController;
         }
     }
@@ -357,5 +328,25 @@ public class ThrowLogic : MonoBehaviour
         transform.SetParent(PlayersHand, true);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+    }
+
+    private Vector3 GetThrowingControllerVelocity()
+    {
+        if (VRReferences.Instance == null || VRReferences.Instance.ControllerData == null)
+            return Vector3.zero;
+
+        if (PlayersHand == null || leftHandController == null || rightHandController == null)
+            return Vector3.zero;
+
+        float distanceToLeft =
+            Vector3.Distance(PlayersHand.position, leftHandController.position);
+
+        float distanceToRight =
+            Vector3.Distance(PlayersHand.position, rightHandController.position);
+
+        if (distanceToLeft < distanceToRight)
+            return VRReferences.Instance.ControllerData.LeftControllerVelocity;
+
+        return VRReferences.Instance.ControllerData.RightControllerVelocity;
     }
 }

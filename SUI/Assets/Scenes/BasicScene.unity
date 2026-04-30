@@ -1185,31 +1185,43 @@ PrefabInstance:
       objectReference: {fileID: 766203129}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[0].time
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[1].time
+      value: 0.7054425
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[2].time
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[1].value
+      value: 0.3841554
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[2].value
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[0].inSlope
-      value: 2
+      value: 0.03968248
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[1].inSlope
-      value: 2
+      value: 1.2879376
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[2].inSlope
+      value: 2.090745
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[0].outSlope
-      value: 2
+      value: 0.03968248
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[1].inWeight
@@ -1217,18 +1229,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[1].outSlope
-      value: 2
+      value: 1.2879376
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[2].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[2].outSlope
+      value: 2.090745
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[0].outWeight
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].outWeight
       value: 0.33333334
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[0].tangentMode
-      value: 34
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: grabCurve.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[2].tangentMode
       value: 34
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2030,6 +2058,7 @@ MonoBehaviour:
   RightHand: {fileID: 766203129}
   LeftHandVisual: {fileID: 600492346}
   RightHandVisual: {fileID: 1571618121}
+  ControllerData: {fileID: 1287956182}
 --- !u!4 &1942525254
 Transform:
   m_ObjectHideFlags: 0

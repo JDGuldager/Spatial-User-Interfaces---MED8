@@ -1,72 +1,52 @@
 using UnityEngine;
 using UnityEngine.XR;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class ControllerData : MonoBehaviour
 {
-    InputDevice LeftControllerDevice;
-    InputDevice RightControllerDevice;
-    Vector3 LeftControllerVelocity;
-    Vector3 RightControllerVelocity;
+    InputDevice leftControllerDevice;
+    InputDevice rightControllerDevice;
+
+    public Vector3 LeftControllerVelocity { get; private set; }
+    public Vector3 RightControllerVelocity { get; private set; }
 
     public bool leftVeloDetected = false;
     public bool rightVeloDetected = false;
 
-    [SerializeField] private float velocityThreshold;
+    [SerializeField] private float velocityThreshold = 0.5f;
 
     void Start()
     {
-        LeftControllerDevice = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
-        RightControllerDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+        leftControllerDevice = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+        rightControllerDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
     }
 
     void Update()
     {
-        if (!LeftControllerDevice.isValid)
-            LeftControllerDevice = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+        if (!leftControllerDevice.isValid)
+            leftControllerDevice = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
 
-        if (!RightControllerDevice.isValid)
-            RightControllerDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+        if (!rightControllerDevice.isValid)
+            rightControllerDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
 
         GetInput();
 
-        if (LeftControllerVelocity.magnitude > velocityThreshold)
-        {
-            leftVeloDetected = true;
-        }
-        else
-        {
-            leftVeloDetected = false;
-        }
-
-        if (RightControllerVelocity.magnitude > velocityThreshold)
-        {
-            rightVeloDetected = true;
-        }
-        else
-        {
-            rightVeloDetected = false;
-        }
+        leftVeloDetected = LeftControllerVelocity.magnitude > velocityThreshold;
+        rightVeloDetected = RightControllerVelocity.magnitude > velocityThreshold;
     }
 
     void GetInput()
     {
-        if (LeftControllerDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out LeftControllerVelocity))
-        {
-            Debug.Log("Left Velocity: " + LeftControllerVelocity.magnitude);
-        }
-        else
-        {
-            Debug.Log("Left velocity NOT available");
-        }
+        leftControllerDevice.TryGetFeatureValue(
+            CommonUsages.deviceVelocity,
+            out Vector3 leftVelocity
+        );
 
-        if (RightControllerDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out RightControllerVelocity))
-        {
-            Debug.Log("Right Velocity: " + RightControllerVelocity.magnitude);
-        }
-        else
-        {
-            Debug.Log("Right velocity NOT available");
-        }
+        rightControllerDevice.TryGetFeatureValue(
+            CommonUsages.deviceVelocity,
+            out Vector3 rightVelocity
+        );
+
+        LeftControllerVelocity = leftVelocity;
+        RightControllerVelocity = rightVelocity;
     }
 }

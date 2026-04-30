@@ -310,9 +310,8 @@ MonoBehaviour:
   returnSpeed: 20
   catchDistance: 0.25
   releaseBufferTime: 0.2
-  throwPowerMultiplier: 2.5
+  throwPowerMultiplier: 3.5
   minimumThrowSpeed: 6
-  aimAssistAmount: 0.35
   crosshairPrefab: {fileID: 8520483733391251754, guid: f1d80f4e9947184478d6618f1e0f0bcd, type: 3}
   crosshairForwardOffset: 1
   triggerPressAmount: 0.7
