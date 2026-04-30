@@ -247,11 +247,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawnTestBall
   testBall: {fileID: 2795182468436240177, guid: 772dd47d54e198f43832d2d499e4be14, type: 3}
   spawnPoint: {fileID: 1806901489}
---- !u!4 &36368200 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5870790035848123411, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
-  m_PrefabInstance: {fileID: 441087506}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &142894862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -260,45 +255,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
-      propertyPath: grabClip
-      value: 
-      objectReference: {fileID: 2460798210113038985, guid: 072a0240c582d4042bf870066de7b2b0, type: 3}
-    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
-      propertyPath: hoverClip
-      value: 
-      objectReference: {fileID: 2460798210113038985, guid: 237e3467803a25841b90998a6223ec9c, type: 3}
-    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
-      propertyPath: playerHand
-      value: 
-      objectReference: {fileID: 36368200}
-    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[0].inSlope
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 346464926673542489, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[0].outSlope
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5738465241882623454, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.81
       objectReference: {fileID: 0}
     - target: {fileID: 5738465241882623454, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.83
+      value: 2.72
       objectReference: {fileID: 0}
     - target: {fileID: 5738465241882623454, guid: 00303f60e2b48c84fae3420105096c27, type: 3}
       propertyPath: m_LocalPosition.z
@@ -771,41 +734,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 185529187}
   m_SourcePrefab: {fileID: 100100000, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
---- !u!1 &723016763
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 723016764}
-  m_Layer: 0
-  m_Name: Pedestals
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &723016764
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 723016763}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02923, y: 0, z: 11.04424}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1463619727}
-  - {fileID: 1934441146}
-  - {fileID: 973499971}
-  - {fileID: 839178181}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &739340518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,12 +998,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 839178177}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.92077, y: 0, z: -4.63424}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.95, y: -0, z: 6.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 723016764}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &899054237
 PrefabInstance:
@@ -1099,7 +1027,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3192851275807406036, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.86
+      value: 2.75
       objectReference: {fileID: 0}
     - target: {fileID: 3192851275807406036, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1134,56 +1062,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabClip
-      value: 
-      objectReference: {fileID: 2460798210113038985, guid: 53af39772c3809c4788589f8e890c6f4, type: 3}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: hoverClip
-      value: 
-      objectReference: {fileID: 2460798210113038985, guid: a64e0b601e3800e478845d7cf5702ec3, type: 3}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: playerHand
-      value: 
-      objectReference: {fileID: 36368200}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
       propertyPath: hapticPlayer
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[0].inSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].inSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[0].outSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].outSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[0].tangentMode
-      value: 34
-      objectReference: {fileID: 0}
-    - target: {fileID: 8407506688340923180, guid: 917ab3ce5fa71f74b925c52d9be5763d, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].tangentMode
-      value: 34
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1295,12 +1175,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 973499967}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.42923, y: 0, z: -4.63424}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.4, y: -0, z: 6.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 723016764}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1249617917
 GameObject:
@@ -1604,12 +1484,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1463619723}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.89923, y: 0, z: -4.57424}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.87, y: -0, z: 6.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 723016764}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1525939153
 PrefabInstance:
@@ -1625,7 +1505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2216070898831579110, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.82
+      value: 2.71
       objectReference: {fileID: 0}
     - target: {fileID: 2216070898831579110, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1660,40 +1540,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
-      propertyPath: grabClip
-      value: 
-      objectReference: {fileID: 2460798210113038985, guid: e37ed4badb92b8f4987501e007693488, type: 3}
-    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
-      propertyPath: hoverClip
-      value: 
-      objectReference: {fileID: 2460798210113038985, guid: 7026aa5ea736ac345964e5ab2a532c49, type: 3}
-    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
-      propertyPath: playerHand
-      value: 
-      objectReference: {fileID: 36368200}
-    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
       propertyPath: hapticPlayer
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].inSlope
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2848102867730521178, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
-      propertyPath: grabCurve.m_Curve.Array.data[1].outSlope
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8797977422501477687, guid: c93cc52506a0d8e4aa9daac7427779e1, type: 3}
       propertyPath: m_Name
@@ -1844,12 +1692,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1934441142}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.4892302, y: 0, z: -4.63424}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.46, y: -0, z: 6.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 723016764}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2092139007
 GameObject:
@@ -1950,7 +1798,10 @@ SceneRoots:
   - {fileID: 739340522}
   - {fileID: 13538242}
   - {fileID: 447501806}
+  - {fileID: 1463619727}
+  - {fileID: 1934441146}
+  - {fileID: 973499971}
+  - {fileID: 839178181}
   - {fileID: 899054237}
   - {fileID: 142894862}
   - {fileID: 1525939153}
-  - {fileID: 723016764}
