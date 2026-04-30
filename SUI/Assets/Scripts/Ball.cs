@@ -62,6 +62,19 @@ public abstract class Ball : MonoBehaviour
         controllerDataScript = FindAnyObjectByType<ControllerData>();
     }
 
+    private void Start()
+    {
+        if (VRReferences.Instance != null)
+        {
+            playerHandLeft = VRReferences.Instance.LeftHand;
+            playerHandRight = VRReferences.Instance.RightHand;
+        }
+        else
+        {
+            Debug.LogError("VRReferences not found in scene.");
+        }
+    }
+
     protected virtual void Update()
     {
         if (canFly)

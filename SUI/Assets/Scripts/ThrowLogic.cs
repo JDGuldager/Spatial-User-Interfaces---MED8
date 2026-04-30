@@ -14,12 +14,14 @@ public class ThrowLogic : MonoBehaviour
     [SerializeField] float releaseBufferTime = 0.5f;
 
     [Header("Controlled Throw")]
-    [SerializeField] float throwPowerMultiplier = 2.5f;
-    [SerializeField] float minimumThrowSpeed = 6f;
+    [SerializeField] float throwPowerMultiplier = 3.5f;
+    [SerializeField] float minimumThrowSpeed = 7f;
+    [SerializeField] float maximumThrowSpeed = 22f;
+    [SerializeField] float upwardArcAmount = 0.15f;
 
     [Header("Crosshair")]
     [SerializeField] GameObject crosshairPrefab;
-    [SerializeField] float crosshairForwardOffset = 3f;
+    [SerializeField] float crosshairForwardOffset = 4f;
 
     [Header("Input Settings")]
     [SerializeField] float triggerPressAmount = 0.7f;
@@ -38,6 +40,9 @@ public class ThrowLogic : MonoBehaviour
 
     bool triggerWasPressedLastFrame;
     float lastReleaseTime = -999f;
+
+    Vector3 currentCrosshairTarget;
+    Vector3 smoothedControllerVelocity;
 
     static ThrowLogic lastGrabbedObject;
 
@@ -91,6 +96,7 @@ public class ThrowLogic : MonoBehaviour
     private void Update()
     {
         UpdateCrosshair();
+        UpdateSmoothedControllerVelocity();
 
         bool triggerPressedNow = IsReturnTriggerPressed();
 
@@ -125,43 +131,61 @@ public class ThrowLogic : MonoBehaviour
     {
         lastReleaseTime = Time.time;
 
-        Vector3 crosshairTarget;
-
-        if (aimHand != null)
-        {
-            crosshairTarget = aimHand.position + aimHand.forward * crosshairForwardOffset;
-        }
-        else
-        {
-            crosshairTarget = transform.position + transform.forward * crosshairForwardOffset;
-        }
+        Vector3 releaseTarget = currentCrosshairTarget;
+        Vector3 releaseVelocity = smoothedControllerVelocity;
 
         DespawnCrosshair();
 
         if (VRReferences.Instance != null && aimHand != null)
             VRReferences.Instance.SetVisualVisibleForHand(aimHand, true);
 
-        StartCoroutine(ApplyControlledThrow(crosshairTarget));
+        StartCoroutine(ApplyControlledThrow(releaseTarget, releaseVelocity));
 
         state = State.Idle;
     }
 
-    private IEnumerator ApplyControlledThrow(Vector3 crosshairTarget)
+    private IEnumerator ApplyControlledThrow(Vector3 targetPosition, Vector3 controllerVelocity)
     {
         yield return new WaitForFixedUpdate();
 
         rb.isKinematic = false;
         rb.useGravity = true;
 
-        Vector3 controllerVelocity = GetThrowingControllerVelocity();
+        Vector3 throwDirection = (targetPosition - transform.position).normalized;
 
-        Vector3 throwDirection =
-            (crosshairTarget - transform.position).normalized;
+        // Prevent accidental downward throws
+        if (throwDirection.y < 0.05f)
+        {
+            throwDirection.y = 0.05f;
+            throwDirection.Normalize();
+        }
 
-        float speed =
-            Mathf.Max(controllerVelocity.magnitude * throwPowerMultiplier, minimumThrowSpeed);
+        // Add a small natural upward arc
+        throwDirection = (throwDirection + Vector3.up * upwardArcAmount).normalized;
 
-        rb.linearVelocity = throwDirection * speed;
+        float rawSpeed = controllerVelocity.magnitude * throwPowerMultiplier;
+
+        float finalSpeed = Mathf.Clamp(
+            rawSpeed,
+            minimumThrowSpeed,
+            maximumThrowSpeed
+        );
+
+        rb.linearVelocity = throwDirection * finalSpeed;
+    }
+
+    private void UpdateSmoothedControllerVelocity()
+    {
+        if (grab == null || !grab.isSelected)
+            return;
+
+        Vector3 rawVelocity = GetThrowingControllerVelocity();
+
+        smoothedControllerVelocity = Vector3.Lerp(
+            smoothedControllerVelocity,
+            rawVelocity,
+            0.35f
+        );
     }
 
     private void SetAimHand()
@@ -179,13 +203,9 @@ public class ThrowLogic : MonoBehaviour
             Vector3.Distance(PlayersHand.position, rightHandController.position);
 
         if (distanceToLeft < distanceToRight)
-        {
             aimHand = rightHandController;
-        }
         else
-        {
             aimHand = leftHandController;
-        }
     }
 
     private void SpawnCrosshair()
@@ -216,10 +236,11 @@ public class ThrowLogic : MonoBehaviour
 
         if (grab != null && grab.isSelected && aimHand != null)
         {
-            crosshairInstance.SetActive(true);
-
-            crosshairInstance.transform.position =
+            currentCrosshairTarget =
                 aimHand.position + aimHand.forward * crosshairForwardOffset;
+
+            crosshairInstance.SetActive(true);
+            crosshairInstance.transform.position = currentCrosshairTarget;
 
             if (Camera.main != null)
             {
