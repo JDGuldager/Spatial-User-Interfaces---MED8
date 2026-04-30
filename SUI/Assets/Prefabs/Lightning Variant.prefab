@@ -92,13 +92,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbdb7e925b5156c4c9f34fe3beea3bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::ThrowLogic
+  horizontalAimCorrection: 0.12
   returnSpeed: 20
   catchDistance: 0.35
   releaseBufferTime: 0.5
   throwPowerMultiplier: 5
   minimumThrowSpeed: 15
   maximumThrowSpeed: 30
-  upwardArcAmount: 0.28
+  upwardArcAmount: 0.18
   crosshairPrefab: {fileID: 8520483733391251754, guid: f1d80f4e9947184478d6618f1e0f0bcd, type: 3}
   crosshairForwardOffset: 1.5
   triggerPressAmount: 0.7
@@ -115,3 +116,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a67ab21d22491314c891568c2d8deb0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::SpawnedPedestalItem
+  leaveDistance: 0.5

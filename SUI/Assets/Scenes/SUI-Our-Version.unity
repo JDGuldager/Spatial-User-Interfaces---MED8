@@ -1551,7 +1551,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: GameScripts::ControllerData
   leftVeloDetected: 0
   rightVeloDetected: 0
-  velocityThreshold: 1
+  velocityThreshold: 0.7
 --- !u!4 &1287956183
 Transform:
   m_ObjectHideFlags: 0
@@ -2108,9 +2108,9 @@ MonoBehaviour:
   timerText: {fileID: 631141242}
   resetController: 5
   spawnCenter: {fileID: 739340522}
-  spawnRadius: 15
+  spawnRadius: 20
   minHeight: 1
-  maxHeight: 8
+  maxHeight: 10
   targetPrefabs:
   - {fileID: 6941355814243877045, guid: 3932eb54ed71b0b4e906421512ad4735, type: 3}
   activeTargetCount: 10

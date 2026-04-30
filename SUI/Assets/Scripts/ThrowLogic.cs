@@ -8,6 +8,9 @@ public enum State { Idle, Return }
 
 public class ThrowLogic : MonoBehaviour
 {
+    [Header("Aim Correction")]
+    [SerializeField] float horizontalAimCorrection = 0.08f;
+
     [Header("Return Settings")]
     [SerializeField] float returnSpeed = 20f;
     [SerializeField] float catchDistance = 0.35f;
@@ -151,7 +154,22 @@ public class ThrowLogic : MonoBehaviour
         rb.isKinematic = false;
         rb.useGravity = true;
 
-        Vector3 throwDirection = (targetPosition - transform.position).normalized;
+        // Vector3 throwDirection = (targetPosition - transform.position).normalized;
+        Vector3 correctedTarget = targetPosition;
+
+        if (Camera.main != null)
+        {
+            Vector3 cameraRight = Camera.main.transform.right;
+
+            XRNode throwingHand = GetReturnControllerNode();
+
+            if (throwingHand == XRNode.RightHand)
+                correctedTarget += cameraRight * horizontalAimCorrection;
+            else
+                correctedTarget -= cameraRight * horizontalAimCorrection;
+        }
+
+        Vector3 throwDirection = (correctedTarget - transform.position).normalized;
 
         // Prevent accidental downward throws
         if (throwDirection.y < 0.05f)
