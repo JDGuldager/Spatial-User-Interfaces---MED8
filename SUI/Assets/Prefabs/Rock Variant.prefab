@@ -99,7 +99,7 @@ MonoBehaviour:
   throwPowerMultiplier: 5
   minimumThrowSpeed: 15
   maximumThrowSpeed: 30
-  upwardArcAmount: 0.18
+  upwardArcAmount: 0.1
   crosshairPrefab: {fileID: 8520483733391251754, guid: f1d80f4e9947184478d6618f1e0f0bcd, type: 3}
   crosshairForwardOffset: 1.5
   triggerPressAmount: 0.7

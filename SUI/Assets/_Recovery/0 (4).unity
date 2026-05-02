@@ -516,17 +516,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 942810691211101373, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 756192407}
     - target: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_Name
       value: XR Origin (XR Rig)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_RootOrder
@@ -580,10 +572,6 @@ PrefabInstance:
       propertyPath: m_PlaySelectEntered
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6678509202150728127, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 756192407}
     - target: {fileID: 8559622106701032237, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_PlayHoverEntered
       value: 0
@@ -1563,7 +1551,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: GameScripts::ControllerData
   leftVeloDetected: 0
   rightVeloDetected: 0
-  velocityThreshold: 0.7
+  velocityThreshold: 1
 --- !u!4 &1287956183
 Transform:
   m_ObjectHideFlags: 0
@@ -2120,9 +2108,9 @@ MonoBehaviour:
   timerText: {fileID: 631141242}
   resetController: 5
   spawnCenter: {fileID: 739340522}
-  spawnRadius: 12
+  spawnRadius: 20
   minHeight: 1
-  maxHeight: 8
+  maxHeight: 10
   targetPrefabs:
   - {fileID: 6941355814243877045, guid: 3932eb54ed71b0b4e906421512ad4735, type: 3}
   activeTargetCount: 10
