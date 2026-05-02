@@ -1,68 +1,106 @@
-
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using Oculus.Haptics;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
-using System.Security.Cryptography;
-using System.Collections;
+using Oculus.Haptics;
 
 public abstract class Ball : MonoBehaviour
 {
+    [Header("Required Components")]
     [SerializeField] MeshRenderer meshRenderer;
     [SerializeField] SphereCollider sphereCollider;
     [SerializeField] Rigidbody rb;
+    [SerializeField] protected XRGrabInteractable interactable;
 
+    private bool hasBeenGrabbed = false;
+
+
+    [Header("Effects")]
     [SerializeField] protected GameObject effect;
     [SerializeField] protected GameObject onImpact;
     [SerializeField] protected float destroyDelay = 2f;
-    [SerializeField] protected XRGrabInteractable interactable;
 
+    [Header("Haptics")]
     [SerializeField] protected HapticClip hoverClip;
     [SerializeField] protected HapticClip grabClip;
+
+    [Header("Fly To Hand")]
+    [SerializeField] private Transform playerHandRight;
+    [SerializeField] private Transform playerHandLeft;
+    [SerializeField] private float duration = 1f;
+    [SerializeField] private AnimationCurve grabCurve;
 
     private HapticClipPlayer rightHoverPlayer;
     private HapticClipPlayer leftHoverPlayer;
     private HapticClipPlayer rightGrabPlayer;
     private HapticClipPlayer leftGrabPlayer;
 
-    private bool isHoveringLeft = false;
-    private bool isHoveringRight = false;
-
-    private bool canFly = false;
-
-    [SerializeField] private Transform playerHandRight;
-    [SerializeField] private Transform playerHandLeft;
-    [SerializeField] private float duration = 1f;
-    [SerializeField] private AnimationCurve grabCurve;
-    private float timeElapsed;
+    private bool isHoveringLeft;
+    private bool isHoveringRight;
+    private bool canFly;
+    private bool isFlyingToHand;
 
     private ControllerData controllerDataScript;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Awake()
+    protected virtual void Awake()
     {
-        rightHoverPlayer = new HapticClipPlayer(hoverClip);
-        leftHoverPlayer = new HapticClipPlayer(hoverClip);
+        // Auto-fill references if they were not assigned on the prefab.
+        // This is important because each prefab has its own serialized fields.
+        if (meshRenderer == null)
+            meshRenderer = GetComponentInChildren<MeshRenderer>();
 
-        rightGrabPlayer = new HapticClipPlayer(grabClip);
-        leftGrabPlayer = new HapticClipPlayer(grabClip);
+        if (sphereCollider == null)
+            sphereCollider = GetComponent<SphereCollider>();
 
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
 
-        rightHoverPlayer.isLooping = true;
-        leftHoverPlayer.isLooping = true;
+        if (interactable == null)
+            interactable = GetComponent<XRGrabInteractable>();
 
-
-        if (onImpact != null)
+        if (interactable == null)
         {
-            onImpact.SetActive(false);
+            Debug.LogError($"{name} has no XRGrabInteractable assigned or found.");
+            enabled = false;
+            return;
         }
 
+        if (rb == null)
+            Debug.LogWarning($"{name} has no Rigidbody assigned or found.");
+
+        if (sphereCollider == null)
+            Debug.LogWarning($"{name} has no SphereCollider assigned or found.");
+
+        if (meshRenderer == null)
+            Debug.LogWarning($"{name} has no MeshRenderer assigned or found.");
+
+        // Create haptic players only if clips exist.
+        if (hoverClip != null)
+        {
+            rightHoverPlayer = new HapticClipPlayer(hoverClip);
+            leftHoverPlayer = new HapticClipPlayer(hoverClip);
+
+            rightHoverPlayer.isLooping = true;
+            leftHoverPlayer.isLooping = true;
+        }
+
+        if (grabClip != null)
+        {
+            rightGrabPlayer = new HapticClipPlayer(grabClip);
+            leftGrabPlayer = new HapticClipPlayer(grabClip);
+        }
+
+        if (onImpact != null)
+            onImpact.SetActive(false);
+
         controllerDataScript = FindAnyObjectByType<ControllerData>();
+
+        if (controllerDataScript == null)
+            Debug.LogWarning("ControllerData was not found in the scene.");
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         if (VRReferences.Instance != null)
         {
@@ -77,6 +115,9 @@ public abstract class Ball : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (hasBeenGrabbed)
+            return;
+
         if (canFly)
         {
             BallToHand();
@@ -85,33 +126,42 @@ public abstract class Ball : MonoBehaviour
 
     private void OnEnable()
     {
+        if (interactable == null)
+            return;
+
         interactable.hoverEntered.AddListener(OnHoverEntered);
-        interactable.selectEntered.AddListener(OnGrabbed);
         interactable.hoverExited.AddListener(OnHoverExited);
+        interactable.selectEntered.AddListener(OnGrabbed);
     }
 
     private void OnDisable()
     {
+        if (interactable == null)
+            return;
+
         interactable.hoverEntered.RemoveListener(OnHoverEntered);
-        interactable.selectEntered.RemoveListener(OnGrabbed);
         interactable.hoverExited.RemoveListener(OnHoverExited);
+        interactable.selectEntered.RemoveListener(OnGrabbed);
     }
 
-    //Events
-    
-
-    void OnHoverEntered(HoverEnterEventArgs args)
+    private void OnHoverEntered(HoverEnterEventArgs args)
     {
-        var hand = GetController(args.interactorObject);
+        Controller hand = GetController(args.interactorObject);
+
+        Debug.Log($"{name} hover entered by {hand}");
 
         if (hand == Controller.Left)
         {
-            if (isHoveringLeft) return; 
+            if (isHoveringLeft)
+                return;
+
             isHoveringLeft = true;
         }
         else
         {
-            if (isHoveringRight) return;
+            if (isHoveringRight)
+                return;
+
             isHoveringRight = true;
         }
 
@@ -120,102 +170,130 @@ public abstract class Ball : MonoBehaviour
         canFly = true;
     }
 
-    void OnHoverExited(HoverExitEventArgs args)
+    private void OnHoverExited(HoverExitEventArgs args)
     {
-        var hand = GetController(args.interactorObject);
+        Controller hand = GetController(args.interactorObject);
+
+        Debug.Log($"{name} hover exited by {hand}");
 
         if (hand == Controller.Left)
         {
-            if (!isHoveringLeft) return;
+            if (!isHoveringLeft)
+                return;
+
             isHoveringLeft = false;
         }
         else
         {
-            if (!isHoveringRight) return;
+            if (!isHoveringRight)
+                return;
+
             isHoveringRight = false;
         }
 
         StopHoverClip(hand);
-        canFly = false;
+
+        if (!isHoveringLeft && !isHoveringRight)
+            canFly = false;
     }
 
     void OnGrabbed(SelectEnterEventArgs args)
     {
+        hasBeenGrabbed = true;
+        canFly = false;
+
         StopHoverClip(GetController(args.interactorObject));
         PlayGrabClip(GetController(args.interactorObject));
     }
 
-    void PlayHoverClip(Controller hand)
+    private void PlayHoverClip(Controller hand)
     {
+        if (hoverClip == null)
+            return;
+
         switch (hand)
         {
             case Controller.Right:
-                rightHoverPlayer.Play(Controller.Right);
+                rightHoverPlayer?.Play(Controller.Right);
                 break;
+
             case Controller.Left:
-                leftHoverPlayer.Play(Controller.Left);
+                leftHoverPlayer?.Play(Controller.Left);
                 break;
+
             default:
                 Debug.LogWarning("Input hand not mapped for: " + hand);
                 break;
         }
-        Debug.Log("Should feel vibration from clipPlayer1 on " + hand + " controller.");
     }
+
     public void StopHoverClip(Controller hand)
     {
+        if (hoverClip == null)
+            return;
+
         switch (hand)
         {
             case Controller.Right:
-                rightHoverPlayer.Stop();
+                rightHoverPlayer?.Stop();
                 break;
+
             case Controller.Left:
-                leftHoverPlayer.Stop();
+                leftHoverPlayer?.Stop();
                 break;
+
             default:
                 Debug.LogWarning("Input hand not mapped for: " + hand);
                 break;
         }
-        Debug.Log("Vibration from clipPlayer1 should stop on hand " + hand + ".");
     }
 
     public void PlayGrabClip(Controller hand)
     {
+        if (grabClip == null)
+            return;
+
         switch (hand)
         {
             case Controller.Right:
-                rightGrabPlayer.Play(Controller.Right);
+                rightGrabPlayer?.Play(Controller.Right);
                 break;
+
             case Controller.Left:
-                leftGrabPlayer.Play(Controller.Left);
+                leftGrabPlayer?.Play(Controller.Left);
                 break;
+
             default:
                 Debug.LogWarning("Input hand not mapped for: " + hand);
                 break;
         }
-        Debug.Log("Should feel vibration from grabClip on " + hand + " controller.");
-    }    
+    }
 
     private Controller GetController(IXRInteractor interactor)
     {
         if (interactor is XRBaseInputInteractor controllerInteractor)
         {
-            var oculusController = controllerInteractor.handedness == InteractorHandedness.Left
-                ? Controller.Left
-                : Controller.Right;
-
-            Debug.Log("Playing haptic on " + controllerInteractor.handedness);
+            Controller oculusController =
+                controllerInteractor.handedness == InteractorHandedness.Left
+                    ? Controller.Left
+                    : Controller.Right;
 
             return oculusController;
         }
-        Debug.LogWarning("Interactor is not XRBaseInputInteractor! Defaulting to Right controller.");
 
+        Debug.LogWarning("Interactor is not XRBaseInputInteractor. Defaulting to Right controller.");
         return Controller.Right;
     }
 
-    
     public void BallToHand()
     {
-        Transform hand;
+        if (isFlyingToHand)
+            return;
+
+        if (controllerDataScript == null)
+            return;
+
+        Transform hand = null;
 
         if (controllerDataScript.leftVeloDetected && isHoveringLeft)
         {
@@ -225,45 +303,60 @@ public abstract class Ball : MonoBehaviour
         {
             hand = playerHandRight;
         }
-        else
-        {
+
+        if (hand == null)
             return;
-        }
+
+        canFly = false;
+        isFlyingToHand = true;
 
         StartCoroutine(FlyToHandCoroutine(transform.position, hand.position, duration));
     }
-    
-    private IEnumerator FlyToHandCoroutine(Vector3 start, Vector3 target, float duration)
+
+    private IEnumerator FlyToHandCoroutine(Vector3 start, Vector3 target, float flyDuration)
     {
         float time = 0f;
-        canFly = false;
-        while (time < duration)
+
+        while (time < flyDuration)
         {
             time += Time.deltaTime;
-            float t = time / duration;
 
-            float curvedT = grabCurve.Evaluate(t);
+            float t = time / flyDuration;
+            float curvedT = grabCurve != null ? grabCurve.Evaluate(t) : t;
 
             transform.position = Vector3.Lerp(start, target, curvedT);
 
             yield return null;
         }
-        transform.position = target;
-    }
-    
 
+        transform.position = target;
+
+        isFlyingToHand = false;
+    }
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Floor"))
-        {
-            meshRenderer.enabled = false; 
+        if (!collision.gameObject.CompareTag("Floor"))
+            return;
+
+        if (meshRenderer != null)
+            meshRenderer.enabled = false;
+
+        if (sphereCollider != null)
             sphereCollider.enabled = false;
+
+        if (rb != null)
             rb.constraints = RigidbodyConstraints.FreezeAll;
+
+        if (effect != null)
             effect.SetActive(false);
+
+        if (onImpact != null)
             onImpact.SetActive(true);
+
+        if (interactable != null)
             interactable.enabled = false;
-            Destroy(gameObject, destroyDelay);
-        }
+
+        Destroy(gameObject, destroyDelay);
     }
 }

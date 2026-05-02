@@ -9,8 +9,9 @@ public class Rock : Ball
     [SerializeField] GameObject ball;
     private Rigidbody RB;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void Start()
     {
+        base.Start();
 
         RB = GetComponent<Rigidbody>();
     }

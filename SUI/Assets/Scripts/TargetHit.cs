@@ -17,9 +17,8 @@ public class TargetHit : MonoBehaviour
         if (alreadyHit)
             return;
 
-        if (collision.gameObject.GetComponent<ThrowLogic>() == null)
+        if (collision.gameObject.GetComponent<Ball>() == null)
             return;
-
         alreadyHit = true;
 
         if (miniGameManager != null)

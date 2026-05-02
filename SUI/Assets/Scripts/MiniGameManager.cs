@@ -21,6 +21,7 @@ public class MiniGameManager : MonoBehaviour
 
     [Header("Target Spawn Area")]
     [SerializeField] Transform spawnCenter;
+    [SerializeField] float minSpawnRadius = 2f;
     [SerializeField] float spawnRadius = 5f;
     [SerializeField] float minHeight = 1f;
     [SerializeField] float maxHeight = 3f;
@@ -69,7 +70,6 @@ public class MiniGameManager : MonoBehaviour
 
     public void AddPoint(int amount)
     {
-        // Prevent scoring after the timer ends.
         if (!gameActive || timeRemaining <= 0f)
             return;
 
@@ -134,7 +134,19 @@ public class MiniGameManager : MonoBehaviour
             return;
         }
 
-        Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
+        if (minSpawnRadius > spawnRadius)
+        {
+            Debug.LogWarning("Min Spawn Radius is greater than Spawn Radius. Clamping min radius.");
+            minSpawnRadius = spawnRadius;
+        }
+
+        float randomRadius = Random.Range(minSpawnRadius, spawnRadius);
+        float randomAngle = Random.Range(0f, Mathf.PI * 2f);
+
+        Vector2 randomCircle = new Vector2(
+            Mathf.Cos(randomAngle),
+            Mathf.Sin(randomAngle)
+        ) * randomRadius;
 
         Vector3 spawnPosition = spawnCenter.position + new Vector3(
             randomCircle.x,
