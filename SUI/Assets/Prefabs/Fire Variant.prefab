@@ -12,6 +12,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fire Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[0].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873649124080758635, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
+      propertyPath: grabCurve.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7359855683223987415, guid: 0d18f34c59adb0c40ac958b0db1e2dfb, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.4

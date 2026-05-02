@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using TMPro;
@@ -8,10 +9,12 @@ public class MiniGameManager : MonoBehaviour
 
     [Header("Game Settings")]
     [SerializeField] float gameDuration = 60f;
+    [SerializeField] int maxSavedGames = 5;
 
     [Header("UI")]
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] TextMeshProUGUI historyText;
 
     [Header("Reset Input")]
     [SerializeField] XRNode resetController = XRNode.RightHand;
@@ -27,9 +30,14 @@ public class MiniGameManager : MonoBehaviour
     [SerializeField] int activeTargetCount = 3;
 
     int score;
+    int gameNumber = 1;
+
     float timeRemaining;
     bool gameActive;
     bool bButtonWasPressed;
+    bool scoreSavedForThisGame;
+
+    List<string> gameHistory = new List<string>();
 
     private void Awake()
     {
@@ -38,7 +46,7 @@ public class MiniGameManager : MonoBehaviour
 
     private void Start()
     {
-        ResetGame();
+        StartNewGame();
     }
 
     private void Update()
@@ -53,7 +61,7 @@ public class MiniGameManager : MonoBehaviour
         if (timeRemaining <= 0f)
         {
             timeRemaining = 0f;
-            gameActive = false;
+            EndGame();
         }
 
         UpdateUI();
@@ -61,7 +69,8 @@ public class MiniGameManager : MonoBehaviour
 
     public void AddPoint(int amount)
     {
-        if (!gameActive)
+        // Prevent scoring after the timer ends.
+        if (!gameActive || timeRemaining <= 0f)
             return;
 
         score += amount;
@@ -70,9 +79,16 @@ public class MiniGameManager : MonoBehaviour
 
     public void ResetGame()
     {
+        EndGame();
+        StartNewGame();
+    }
+
+    private void StartNewGame()
+    {
         score = 0;
         timeRemaining = gameDuration;
         gameActive = true;
+        scoreSavedForThisGame = false;
 
         ClearExistingTargets();
         SpawnStartingTargets();
@@ -80,12 +96,28 @@ public class MiniGameManager : MonoBehaviour
         UpdateUI();
     }
 
+    private void EndGame()
+    {
+        if (scoreSavedForThisGame)
+            return;
+
+        gameActive = false;
+        scoreSavedForThisGame = true;
+
+        gameHistory.Add("Game " + gameNumber + " Score: " + score);
+        gameNumber++;
+
+        while (gameHistory.Count > maxSavedGames)
+            gameHistory.RemoveAt(0);
+
+        ClearExistingTargets();
+        UpdateUI();
+    }
+
     private void SpawnStartingTargets()
     {
         for (int i = 0; i < activeTargetCount; i++)
-        {
             SpawnTarget();
-        }
     }
 
     public void SpawnTarget()
@@ -131,9 +163,7 @@ public class MiniGameManager : MonoBehaviour
         TargetHit[] targets = FindObjectsByType<TargetHit>(FindObjectsSortMode.None);
 
         foreach (TargetHit target in targets)
-        {
             Destroy(target.gameObject);
-        }
     }
 
     private void UpdateUI()
@@ -143,6 +173,9 @@ public class MiniGameManager : MonoBehaviour
 
         if (timerText != null)
             timerText.text = "Time: " + Mathf.CeilToInt(timeRemaining);
+
+        if (historyText != null)
+            historyText.text = string.Join("\n", gameHistory);
     }
 
     private void CheckResetButton()
