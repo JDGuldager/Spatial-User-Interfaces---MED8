@@ -1,101 +1,92 @@
-🎯 VR Throwing Interaction Project
-Overview
+# 🎯 VR Throwing Interaction Project
 
-This project explores improved throwing interactions in VR using Unity and OpenXR.
-
+## 📖 Overview
+This project explores improved throwing interactions in VR using Unity and OpenXR.  
 The goal is to compare Unity’s default throwing system with a custom-built solution designed to improve accuracy and usability.
 
-The project was developed by Laurids, Jeppe, and Matilda.
+Developed by **Laurids, Jeppe, and Matilda**.
 
-YouTube Playthrough: https://www.youtube.com/watch?v=zg1tq0ce_X4
+🎥 **YouTube Playthrough:**  
+https://www.youtube.com/watch?v=zg1tq0ce_X4
 
-🎮 Features
+---
 
-Custom Throwing System
+## 🎮 Features
 
-Crosshair-based aiming for improved precision
+### 🎯 Custom Throwing System
+- Crosshair-based aiming for improved precision  
+- Velocity-based throwing with controlled scaling  
+- Adjusted trajectory with a slight upward arc  
+- Horizontal correction to reduce misalignment  
 
-Velocity-based throwing with controlled scaling
+### 🔧 Default Throw Comparison
+- Uses Unity’s XR Interaction Toolkit grab interactable  
+- Serves as a baseline for evaluation  
 
-Adjusted trajectory with slight upward arc
+### ✋ Force Pull Mechanic
+- Pull objects toward the player with a quick arm movement  
+- Inspired by “force pull” interactions  
 
-Horizontal correction to reduce misalignment
+### 🔊 Haptics
+- Custom haptic feedback for different object types  
+- Helps distinguish objects through tactile cues  
 
-Default Throw Comparison
+---
 
-Uses Unity’s XR Interaction Toolkit grab interactable
-
-Serves as baseline for evaluation
-
-Force Pull Mechanic
-
-Objects can be pulled toward the player by a quick hand motion
-
-Inspired by “force pull” interactions
-
-Haptics
-
-Custom haptic feedback for different object types
-
-Helps distinguish objects through tactile cues
-
-
-🧪 Evaluation
+## 🧪 Evaluation
 
 The project includes a simple test setup:
 
-Two modes:
+- Two modes:
+  - Default XR throwing  
+  - Custom throwing system  
+- Players hit targets within a time limit  
+- Score is recorded and displayed  
 
-Default XR throwing
+**Result:**  
+The custom throwing system made it easier to aim and hit targets compared to the default system.
 
-Custom throwing system
+---
 
-Players hit targets within a time limit
+## 🎯 Spawning & Scoring
 
-Score is recorded and displayed
+- Targets spawn randomly within a defined radius  
+- Minimum distance prevents targets from spawning too close  
+- Targets respawn immediately after being hit  
+- Time-limited rounds  
+- Final score is used to compare throwing systems  
 
-Results from testing showed that the custom throwing system made it easier to aim and hit targets compared to the default system.
+---
 
-🎯 Spawning & Scoring
+## 🕹 Controls
 
-Targets spawn randomly within a defined radius
+| Action           | Input                              |
+|------------------|-------------------------------------|
+| Grab object      | Trigger                             |
+| Throw object     | Release trigger                     |
+| Recall object    | Trigger press                       |
+| Force pull       | Quick arm movement while hovering   |
+| Reset game       | B button                            |
+| Return to menu   | Y button                            |
 
-A minimum distance prevents targets from spawning too close
+---
 
-When a target is hit, a new one is spawned immediately
+## 🛠 Requirements
 
-A timer limits each round
+- Unity (Unity 6 / 2022+ recommended)  
+- OpenXR enabled  
+- VR headset (tested with Meta Quest 2 & 3)  
 
-Final score is used to compare throwing systems
+---
 
+## 📦 Scenes
 
-🕹 Controls
+- **Scene Selector** – Choose between throwing systems  
+- **Default Scene** – Unity XR throwing  
+- **Custom Scene** – Improved throwing system  
 
-Action	Input
+---
 
-Grab object	Trigger
+## 🚀 Summary
 
-Throw object	Release trigger
-
-Recall object	Trigger press
-
-Force pull	Quick arm movement while hovering
-
-Reset game	B button
-
-Return to menu	Y button
-
-
-🛠 Requirements
-
-Unity (Unity 6 / 2022+ recommended)
-
-OpenXR enabled
-
-VR headset (tested with Meta Quest 2 & 3)
-
-📦 Scenes
-
-Scene Selector – Choose between throwing systems
-Default Scene – Unity XR throwing
-Custom Scene – Improved throwing system
+This project demonstrates how adding visual guidance, controlled velocity, and small trajectory adjustments can significantly improve throwing accuracy and overall user experience in VR.
