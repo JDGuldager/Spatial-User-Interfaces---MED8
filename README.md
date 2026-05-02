@@ -23,6 +23,7 @@ Inspired by “force pull” interactions
 Haptics
 Custom haptic feedback for different object types
 Helps distinguish objects through tactile cues
+
 🧪 Evaluation
 
 The project includes a simple test setup:
@@ -49,10 +50,12 @@ Recall object	Trigger press
 Force pull	Quick arm movement while hovering
 Reset game	B button
 Return to menu	Y button
+
 🛠 Requirements
 Unity (Unity 6 / 2022+ recommended)
 OpenXR enabled
 VR headset (tested with Meta Quest 2 & 3)
+
 📦 Scenes
 Scene Selector – Choose between throwing systems
 Default Scene – Unity XR throwing
