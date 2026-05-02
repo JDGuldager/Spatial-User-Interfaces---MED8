@@ -90,3 +90,10 @@ The custom throwing system made it easier to aim and hit targets compared to the
 ## 🚀 Summary
 
 This project demonstrates how adding visual guidance, controlled velocity, and small trajectory adjustments can significantly improve throwing accuracy and overall user experience in VR.
+
+---
+
+## Use of AI
+AI has been used in the process of creating this project. Namely, it has been used to
+- Suggest and restructure code
+- Strengthen the language and structure of the report
