@@ -46,6 +46,8 @@ The project includes a simple test setup:
 **Result:**  
 The custom throwing system made it easier to aim and hit targets compared to the default system.
 
+The full evaluation results in full can be seen in 'test results.pdf'.
+
 ---
 
 ## 🎯 Spawning & Scoring
