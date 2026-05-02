@@ -6,6 +6,8 @@ The goal is to compare Unity’s default throwing system with a custom-built sol
 
 The project was developed by Laurids, Jeppe, and Matilda.
 
+YouTube Playthrough: https://www.youtube.com/watch?v=zg1tq0ce_X4
+
 🎮 Features
 Custom Throwing System
 Crosshair-based aiming for improved precision
